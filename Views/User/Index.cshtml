@@ -1,0 +1,53 @@
+﻿@model List<RiraTest.Core.Entities.MyUser>
+@{
+    ViewData["Title"] = "لیست متا تگ ها";
+}
+@section BreadCrumb{
+    <div class="text text-black-50 padding-top-14">
+        <span class="mt-5 pt-5">مدیریت متا تگ ها</span>
+        /
+        <span class="mt-5 pt-5">@ViewData["Title"]</span>
+        <hr />
+    </div>
+}
+
+@Html.Raw(TempData["Final"])
+
+<script id="GridToolbarTemplate" type="text/html">
+    <a role="button" class="k-button k-button-icontext k-grid-add btn btn-success" asp-action="Create" asp-controller="User"  ><span class="k-icon k-i-plus"></span>افزودن</a>
+</script>
+<div class="k-rtl">
+    <kendo-grid name="Grid" style="height:auto; width:100%;" pageable-messages="نمایش {0} از {1}.  ایتم : {2}" sortable="true">
+        <columns>
+            <column field="" title="ردیف" template="#=row()#"></column>
+            <column field="FirstName" title="نام"></column>
+            <column field="LasName" title="نام خانوادگی"></column>
+            <column title="عملیات" template="#=operation(data)#">
+            </column>
+        </columns>
+        <toolbar client-template-id="GridToolbarTemplate">
+        </toolbar>
+
+        <datasource type="Kendo.Mvc.UI.DataSourceTagHelperType.Ajax" page-size="20" page="1" server-operation="false" data="@Model">
+            <transport>
+                <read url="@Url.Action("Index", "User")" />
+                <create url="@Url.Action("Create", "User")" />
+            </transport>
+        </datasource>
+        <pageable enabled="true" />
+        <sortable enabled="true" />
+        <scrollable enabled="false" />
+
+    </kendo-grid>
+
+</div>
+@section Scripts{
+    <script>
+        function operation(data) {
+            return `
+                                    <a href="/Manage/MyUser/Edit/${data.Id}" class="k-button k-button-icontext k-grid-edit btn btn-info">ویرایش</a>
+                            `;
+        }
+    </script>
+
+}
